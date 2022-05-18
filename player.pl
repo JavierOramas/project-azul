@@ -31,7 +31,11 @@ enumerate([E1|List], Number, [E1-Number|R]) :-
 
 list_colors([blue, red, yellow, black, white]).
 
-select_strategy([basic, greedy, finish]).
+strategies([basic, greedy]).
+
+select_strategy(Strategy):-
+    strategies(Strategies),
+    random_permutation(Strategies, [Strategy|_]).
 
 generate_floor([-1,-1,-2,-2,-2,-3,-3]:penalties).
 
@@ -66,11 +70,31 @@ genereate_players(N,Players:players) :-
     % Ordena los jugadores
     enumerate(UnorderedPlayers, 1, Players).
 
+basic(Game, Player, NewGame, NewPlayer, A) :- 
+    valid_moves(Game, Player, [A|_]),
+    update_player(Player, Game, A, NewPlayer, Return, _),
+    update_game(Game, A, NewGame, Return).
+basic(Game, Player, NewGame, NewPlayer, none:Id:Color) :- 
+    valid_moves(Game, none:Id:Col
+% Si no quedan Jugadores por Jugar termina la ronda
+run_round(Game, [], Game, []).
+run_round(Game, [Player:Id| Players], NewGame, [Id:FId| Events]) :-
+    % Detecta estrategia del jugador
+    find_dict(strategy, Player, Strategy),
+    % TODO Print Player info
 
+    % Ejecuta la estrategia utilizando el tablero del jugador y las fabricas que hay disponibles 
+    Move =..[Strategy, Game, Player, TempGame, NewPlayer, LId:FID:Color],
+    % TODO Print Move
 
+    % Obtiene el estado de las fabricas despues de la jugada
+    find_dict(factories, TempGame, Factories),
+    % TODO Print Factories info and Preparation zone for Player
 
+    % Actualiza el tablero del jugador
+    find_dict(players, TempGame, PrevPlayers),
+    set_dict(Id, PrevPlayers, NewPlayer, CurrPlayers),
+    set_dict(players,TempGame, CurrPlayers, NewTempGame),
 
-
-
-
-
+    % Cede el turno al siguiente jugador 
+    run_round(NewTempGame, Players, NewGame, Events).
