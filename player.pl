@@ -26,6 +26,35 @@ enumerate([E1|List], Number, [E1-Number|R]) :-
     Number1 is Number+1,
     enumerate(List, Number1, R).
 
+consecutive([(X, B)|L], (X,Y), C, R) :-
+    B is Y+1, !,
+    consecutive(L, (X,B), A,R),
+    append([(X,B)], A,C).
+consecutive(L,_,[],L).
+
+adj([],[]).
+adj([X|L], I) :-
+    consecutive(L,X,C,R),
+    append([X],C,B),
+    adj(R,K),
+    append([B], K, I).
+
+
+find_adj(L, I) :-
+    is_list(L),
+    sort(L,S),
+    adj(S,I).
+
+find_index(V,L,I) :-
+    append(A, [V|_], L),
+    length(A,I).
+find_index(_,_,-1).
+
+get_column(Line, Color, Column) :-
+    list_colors(Colors),
+    find_index(Color, Colors, Idx),
+    Column is (Idx+Line-1) mod 5+1.
+
 % % % Others
 count(L, X, N) :-
     findall(1,member(X,L), K),
@@ -69,7 +98,7 @@ select_strategy(Strategy):-
 generate_floor([-1,-1,-2,-2,-2,-3,-3]:penalizations).
 
 % Genera tablero en escalera para fase de preparación
-generate_board(Board):-
+generate_board(Data:board):-
     % Genera una lista de listas de longitud 5
     add([], 5, 1, List),
     enumerate(List, 1, Enum),
@@ -79,7 +108,7 @@ generate_board(Board):-
     findall([New:stocks, C:valid, C:all]:Sz,
         (find_dict(Sz, Enum, _),
     add([], Sz, empty, New)
-    ), Data).
+    ), Data:board).
 
 % Game
 
@@ -91,13 +120,38 @@ penalize(Player, Penalization, NewPlayer) :-
     append([Penalization], R, Penalizations),
     % TODO Print penalization for Player
 
-    set_dict(penalizations, Player, R, TempPlayer).
+    set_dict(penalizations, Player, R, TempPlayer),
     find_dict(score, Player, Score),
     UpdatedScore is Score + Penalization,
     set_dict(score, TempPlayer, UpdatedScore, TempPlayer2),
     PnalizationTimes is Penalization+1,
     penalize(TempPlayer2, PnalizationTimes, NewPlayer).
 penalize(Player, _, Player).
+
+transpose_wall(L,R) :-
+    findall((Y,X), member((X,Y), L), R).
+
+tile_score(Player, (Row, Column), Score) :-
+    find_dict(wall, Player, Wall),
+    append(Wall, [(Row, Column)], Wall2),
+    line_score(Wall2, [(Row, Column)], RowScore),
+    transpose_wall(Wall2, TransposedWall),
+    line_score(TransposedWall, [(Row, Column)], ColumnScore),
+    Score is RowScore + ColumnScore.
+
+line_score(List, Tile, Score) :-
+    find_adj(List, Interval),
+    findall(X, (
+        member(X, Interval),
+        member(Tile, X)
+        ), [Adj]), 
+        length(Adj, Score).
+
+update_wall(Player, Tile, NewPlayer) :-
+    % TODO Print tile for Player
+    find_dict(wall, Player, Wall),
+    add(Wall, 1, Tile, NewWall),
+    set_dict(wall, Player, NewWall, NewPlayer).
 
 update_score(Player, (Line,Color), NewPlayer) :-
     find_dict(board, Player, Board),
@@ -107,7 +161,7 @@ update_score(Player, (Line,Color), NewPlayer) :-
     tile_score(Player, (Line,Color), Score),
     find_dict(score, Player, PlayerScore),
     Sum is PlayerScore + Score,
-    update_board(Player, (Line,Color), CurrPlayer),
+    update_wall(Player, (Line,Color), CurrPlayer),
     set_dict(score, CurrPlayer, Sum, NewPlayer).
 update_score(Player, _, Player).
 
@@ -120,6 +174,7 @@ update_line(Player, Game, Line:Factory:Color, NewPlayer, TilesOut, TilesPenalty)
     count(Stocks, empty, EmptyCount),
     count(FactoryData, Color, ColorCount),
     replace(Stocks, ColorCount, empty, Color, NewStocks),
+    count(NewStocks,empty, NewEmpty),
     TilesOut is min(EmptyCount-ColorCount, 0),
     TilesPenalty is min(NewEmpty-1, 0)* -(Line -1),
     % TODO print Player Preparation zone
@@ -135,14 +190,14 @@ clean_line(Player, Line, NewPlayer) :-
     find_dict(stocks, LineData, Stocks),
     find_dict(valid, LineData, [Color]),
 
-    add([],Line, Color, CurrentStocks),
+    add([],Line, Color, Stocks),
     append(A, [Color | B], Colors),
     append(A, B, List),
     set_dict(all, LineData, List, NewLineData),
     set_dict(valid, NewLineData, List, ValidLine),
 
     get_column(Line, Color, Column),
-    update_score(Player, (L,Column), TempPlayer).
+    update_score(Player, (L,Column), TempPlayer),
 
     add([], L, empty, Stocks),
     set_dict(stocks, ValidLine, Stocks, ValidLine2),
@@ -171,9 +226,9 @@ genereate_players(N,Players:players) :-
     generate_floor(Floor),
     % Asigna a cada jugador un tablero de cada tipo, además creal el muro 
     % y define el score = 0
-    add([], N, [Board, Penalties, []:wall, 0:score], List),
+    add([], N, [Board, Floor, []:wall, 0:score], List),
     findall(P, (
-        member(P, List),
+        member(X, List),
         select_strategy(S),
         set_dict(strategy, X,S,P)
     ), UnorderedPlayers),
@@ -181,6 +236,7 @@ genereate_players(N,Players:players) :-
     enumerate(UnorderedPlayers, 1, Players).
 
 valid_moves(Game, Player, Moves) :-
+    % gets 
     find_dict(factories, Game, Factories),
     find_dict(board, Player, Board),
     findall(LineId:FactoryId:Color, (
@@ -233,16 +289,54 @@ update_game(Game, _:Factory:Color, NewGame, OutTiles) :-
     set_dict(Color, Outs, Sum, NewOuts),
     set_dict(outs, TempGame, NewOuts, NewGame).
 
-basic(Game, Player, NewGame, NewPlayer, A) :-
-    valid_moves(Game, Player, [A|_]),
-    update_player(Player, Game, A, NewPlayer, Return, _),
-    update_game(Game, A, NewGame, Return).
+% Estrategia básica de jugador:
+% Obtiene todas las jugadas válidas y ejecuta la primera en la lista
+basic(Game, Player, NewGame, NewPlayer, Move) :-
+    % Obtiene la lista de movimientos válidos
+    valid_moves(Game, Player, [Move|_]),
+    % Ejecuta la primera jugada en la lista
+    update_player(Player, Game, Move, NewPlayer, Return, _),
+    % actualiza el tablero del Jugador
+    update_game(Game, Move, NewGame, Return).
+% Si no puede tomar ninguna para el tablero
 basic(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
+    % toma la primera jugada igualmente
     available_colors(Game, [Ammount:Id:Color| _ ]), !,
+    % actualiza el juego
     update_game(Game, none:Id:Color, NewGame, Ammount),
+    % calcula la penalización
     Penalization is Ammount * -1,
+    % penaliza al jugador
     penalize(Player, Penalization, NewPlayer).
+% Si no puede hacer nada pasa el turno
 basic(Game, Player, Game, Player, none:none:none).
+
+% Estrategia Greedy de Jugador:
+% Obtiene todos los movimientos validos
+% Escoge el que maximice el score
+% Si no existe, el que minimice la penalización
+greedy(Game, Player, NewGame, NewPlayer, Move) :-
+    valid_moves(Game, Player, Moves), !,
+    % log mode ID
+    findall(Score:Move, (
+        member(Move, Moves),
+        update_player(Player, Game, Move, _, _, TempPlayer),
+        find_dict(score, TempPlayer, Score)
+        ), Options
+    ),
+    sort(Options, Sorted),
+    append(_, [_:Move], Sorted),
+    % Set Mode ID
+    update_player(Player, Game, Move, NewPlayer, Return, _),
+    update_game(Game, Move, NewPlayer, Return).
+greedy(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
+    available_colors(Game, Moves), !,
+    sort(Moves, [Ammount:Id:Color|_]),
+    update_game(Game, none:Id:Color, NewGame, Ammount),
+    Neg is Ammount * -1,
+    penalize(Player, Neg, NewPlayer).
+greedy(Game, Player, Game, Player, none:none:none).
+
 
 % Si no quedan Jugadores por Jugar termina la ronda
 run_round(Game, [], Game, []).
@@ -252,17 +346,23 @@ run_round(Game, [Player:Id| Players], NewGame, [Id:FId| Events]) :-
     % TODO Print Player info
 
     % Ejecuta la estrategia utilizando el tablero del jugador y las fabricas que hay disponibles 
-    Move =..[Strategy, Game, Player, TempGame, NewPlayer, LId:FID:Color],
+    Move =..[Strategy, Game, Player, TempGame, NewPlayer, LId:FId:Color],
     % TODO Print Move
-
+    Move,
+    writeln(LId),
+    writeln(Color),
     % Obtiene el estado de las fabricas despues de la jugada
     find_dict(factories, TempGame, Factories),
     % TODO Print Factories info and Preparation zone for Player
+    writeln(Factories),
 
     % Actualiza el tablero del jugador
     find_dict(players, TempGame, PrevPlayers),
     set_dict(Id, PrevPlayers, NewPlayer, CurrPlayers),
     set_dict(players,TempGame, CurrPlayers, NewTempGame),
 
-    % Cede el turno al siguiente jugador 
+    % Cede el turno al siguiente jugador
     run_round(NewTempGame, Players, NewGame, Events).
+
+
+% TODO Clean Player
