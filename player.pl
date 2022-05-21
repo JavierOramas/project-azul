@@ -57,15 +57,23 @@ find_adj(L, I) :-
     % genera la lista de todos los adyacentes
     adj(S,I).
 
+% gets index
 find_index(V,L,I) :-
+    % Obtiene la lista hasta el elemento V
     append(A, [V|_], L),
+    % Retorna el largo de esa lista que coincide con el index de v
     length(A,I).
+% si no está e elemento, retorna -1
 find_index(_,_,-1).
 
 get_column(Line, Color, Column) :-
+    % genera la lista de colores
     list_colors(Colors),
+    % encuentra el indice en la lista de colores
     find_index(Color, Colors, Idx),
-    Column is (Idx+Line-1) mod 5+1.
+    % el nuevo indice en el muro será el resultado de la formula siguiente
+    % se suma 1 al final para referirse a la primera columna (0 en la lista)
+    Column is (Idx+Line-1) mod 5 +1.
 
 % % % Others
 count(L, X, N) :-
@@ -127,107 +135,153 @@ generate_board(Data:board):-
 
 % Game
 
+% Penaliza al jugador
 penalize(Player, Penalization, NewPlayer) :-
+    % la penalización tiene que ser negativa
     Penalization < 0,
+    % se obtienen las penalizaciones del jugador
     find_dict(penalizations, Player, Penalizations),
     length(Penalizations, N),
+    % se obtiene el nuevo valor de las penalizaciones
     N > 0, !,
+    % tomamos la primera
     append([Penalization], R, Penalizations),
     % TODO Print penalization for Player
-
+    % se elimina la penalizacion de la lista de penalizaciones
     set_dict(penalizations, Player, R, TempPlayer),
+    % se obtiene el score
     find_dict(score, Player, Score),
+    % se afecta el score con la penalizacion
     UpdatedScore is Score + Penalization,
+    % se actualiza el score
     set_dict(score, TempPlayer, UpdatedScore, TempPlayer2),
     PnalizationTimes is Penalization+1,
+    % se llama recursivo a penlizar
     penalize(TempPlayer2, PnalizationTimes, NewPlayer).
+% si no quedan penalizaciones pendientes se retorna el jugador
 penalize(Player, _, Player).
 
 % transpone el muro
 transpose_wall(L,R) :-
     findall((Y,X), member((X,Y), L), R).
 
+% calcula la puntuación horizontal y vertical de poner una pieza
 tile_score(Player, (Row, Column), Score) :-
+    % Obtiene el muro del jugador y coloca la pieza
     find_dict(wall, Player, Wall),
     append(Wall, [(Row, Column)], Wall2),
+    % calcula el score horizontal y verticla, transponiendo la lista
     line_score(Wall2, [(Row, Column)], RowScore),
     transpose_wall(Wall2, TransposedWall),
     line_score(TransposedWall, [(Row, Column)], ColumnScore),
+    % suma los scores 
     Score is RowScore + ColumnScore.
 
+% Calcula el score de una linea
 line_score(List, Tile, Score) :-
+    % obtiene la lista de los adyacentes
     find_adj(List, Interval),
+    % busca en todos los intervalos si el tile esta en alguno
     findall(X, (
         member(X, Interval),
         member(Tile, X)
         ), [Adj]), 
+        % obtiene la longitud de estos
         length(Adj, Score).
 
+% Coloca una pieza en el muro
 update_wall(Player, Tile, NewPlayer) :-
     % TODO Print tile for Player
+    % obtiene el muro del jugador
     find_dict(wall, Player, Wall),
+    % coloca la pieza en el muro
     add(Wall, 1, Tile, NewWall),
+    % actualiza el muro del jugador
     set_dict(wall, Player, NewWall, NewPlayer).
 
+% 
 update_score(Player, (Line,Color), NewPlayer) :-
+    % obtiene la zona de preparación del jugador
     find_dict(board, Player, Board),
     find_dict(Line, Board, LineData),
     find_dict(stocks, LineData, Stocks),
+    % si tiene espacios vacíos en la linea 
     count(Stocks, empty, 0), !,
+    % obtiene la puntuación de la pieza 
     tile_score(Player, (Line,Color), Score),
     find_dict(score, Player, PlayerScore),
+    % actualiza la puntuación del jugador
     Sum is PlayerScore + Score,
+    % actualiza el muro y asigna la puntuacion al jugador
     update_wall(Player, (Line,Color), CurrPlayer),
     set_dict(score, CurrPlayer, Sum, NewPlayer).
+% si no pudo colocar la pieza se queda igual
 update_score(Player, _, Player).
 
+
 update_line(Player, Game, Line:Factory:Color, NewPlayer, TilesOut, TilesPenalty) :-
+    % obtiene la zona de preparación del jugador asociada a una linea
     find_dict(factories, Game, Factories),
     find_dict(Factory, Factories, FactoryData),
     find_dict(board, Player, Board),
     find_dict(Line, Board, LineData),
     find_dict(stocks, LineData, Stocks),
+    % cuenta los espacios vacíos en la linea
     count(Stocks, empty, EmptyCount),
+    % cuenta cuantas piezas del color seleccionado hay en la factory seleccionada
     count(FactoryData, Color, ColorCount),
+    % reemplaza las piezas vacías en la linea de preparación
     replace(Stocks, ColorCount, empty, Color, NewStocks),
     count(NewStocks,empty, NewEmpty),
+    % Si sobraron piezas, penaliza al jugador con esa cantidad de piezas
     TilesOut is min(EmptyCount-ColorCount, 0),
     TilesPenalty is min(NewEmpty-1, 0)* -(Line -1),
     % TODO print Player Preparation zone
+    % Actualiza todos los tableros en el jugador
     set_dict(stocks, LineData, NewStocks, NewLineData),
     set_dict(valid, NewLineData, [Color], ValidLine),
     set_dict(Line, Board, ValidLine, NewBoard),
     set_dict(board, Player, NewBoard, NewPlayer).
 
 clean_line(Player, Line, NewPlayer) :-
+    % obtiene toda la información de los tableros del jugador
     find_dict(board, Player, Board),
     find_dict(Line, Board, LineData),
     find_dict(all, LineData, Colors),
     find_dict(stocks, LineData, Stocks),
     find_dict(valid, LineData, [Color]),
 
+    % verifica si la linea está completa
     add([],Line, Color, Stocks),
     append(A, [Color | B], Colors),
     append(A, B, List),
+
+    % si la linea está completa actualiza los colores validos para la linea
     set_dict(all, LineData, List, NewLineData),
     set_dict(valid, NewLineData, List, ValidLine),
 
+    % actualiza el score del jugador
     get_column(Line, Color, Column),
     update_score(Player, (L,Column), TempPlayer),
 
-    add([], L, empty, Stocks),
+    % Limpia la linea (añade Line veces empty)
+    % Actualiza tods los tableros en Player
+    add([], Line, empty, Stocks),
     set_dict(stocks, ValidLine, Stocks, ValidLine2),
     set_dict(Line, Board, ValidLine2, NewBoard),
     set_dict(board, TempPlayer, NewBoard, NewPlayer).
 
-% Revisa Las lineas completadas en la zona de preparación 
+% Revisa Las lineas completadas en la zona de preparación
+% Si no hya lineas que limpiar retorna el jugador sin cambios
 verify_lines(Player, [], Player).
 verify_lines(Player, [_:Line|Lines], NewPlayer) :-
+    % Limpia la linea y manda a limpiar recursivamente
     clean_line(Player, Line, CurrPlayer),
     verify_lines(CurrPlayer, Lines, NewPlayer).
 verify_lines(Player, [_|Lines], NewPlayer) :-
     verify_lines(Player, Lines, NewPlayer).
 verify_lines(Player, Lines:unordered, NewPlayer) :-
+    % ordena las lineas y manda a limpiar recursivamente
     sort_by_index(Lines, SortedLines),
     verify_lines(Player, SortedLines, NewPlayer).
 
@@ -252,7 +306,6 @@ genereate_players(N,Players:players) :-
     enumerate(UnorderedPlayers, 1, Players).
 
 valid_moves(Game, Player, Moves) :-
-    % gets 
     find_dict(factories, Game, Factories),
     find_dict(board, Player, Board),
     findall(LineId:FactoryId:Color, (
@@ -278,7 +331,7 @@ available_colors(Game, Moves) :-
         Color \= empty,
         count(ThisFactory, Color, Count)
     ), Moves),
-
+    % garantiza no devolver una cantidad vacía de moves
     not(length(Moves,0)).
 
 update_player(Player, Game, Line:Factory:Color, NewPlayer, OutTiles, FinalPlayer) :-
@@ -307,11 +360,13 @@ update_game(Game, _:Factory:Color, NewGame, OutTiles) :-
 
     % generamos una factory nueva para sustituir la antigua
     add([], 4, empty, NewFactory),
+    % sustituye los nuevos valores
     set_dict(Factory, Factories, NewFactory, TemporalFactories),
     find_dict(center, TemporalFactories, Center),
     append(CenterTiles, Center, NewCenter),
     set_dict(center, TemporalFactories, NewCenter, FinalFactories),
     % TODO Print State of center
+    % actualiza la cantidad de piezas fuera del jeugo
     set_dict(factories, Game, FinalFactories, TempGame),
     find_dict(outs, Game, Outs),
     find_dict(Color, Outs, Ammount),
