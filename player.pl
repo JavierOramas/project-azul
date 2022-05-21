@@ -14,6 +14,11 @@ set_dict(Key, Value, Dict, FinalDict) :-
     del_dict(Key, Dict, NewDict),
     concat([Key:Value], NewDict, FinalDict).
 
+append_all([], []).
+append_all([X|Y], R) :-
+    append_all(Y, L),
+    concat(X, L, R).
+
 add(L, 0, _, L).
 add(L,K,X,R) :-
     K>0,
@@ -481,5 +486,183 @@ clean_players(Game, NewGame) :-
         Score is max(CurScore, 0),
         set_dict(score, NewPlayer, Score, Player)
     ), NewPlayers),
-    % asigna los nuevos jugadores al nuevo juego
     set_dict(players, Game, NewPlayers, NewGame).
+
+start_game(Players, Factories) :-
+    generate_game(Players, Factories, Game),
+    new_round(Game, NewGame),
+    run(NewGame, [], EndedGame),
+    writeln(EndedGame:scores),
+    writeln("true.").
+start_game(_, _, _, _) :-
+    % writeln(["Error ocurred"]),
+    writeln("fail.").
+
+generate_game(Players, Factories, [P, A:ammounts, O:outs, F:factories]) :-
+    list_colors(Colors),
+    genereate_players(Players, P),
+    findall(20:X, member(X,C), A),
+    findall(0:X, member(X,C), O),
+    add([], 4, empty, E),
+    add([], Factories, E, EF),
+    enumerate(EF,1,NF),
+    set_dict(center, NF, [], F).
+
+new_round(Game, NewGame) :-
+    prepare(Game, TempGame),
+    find_dict(ammounts, TempGame, Ammounts),
+    findall(List, (
+        find_dict(Color, Ammounts, Quant),
+        add([], Quant, Color, List)
+    ), GroupsColor),
+    append_all(GroupsColor, ColorsList),
+    random_permutation(ColorsList, ColorsOrder),
+    find_dict(factories, TempGame, Factories),
+    del_dict(center, Factories, FactoriesNoCenter),
+    findall(Fac, member(Fac:_, FactoriesNoCenter), FactoriesList),
+    use_factory(FactoriesList, ColorsOrder, TempFac),
+    append_all(TempFac, UsedTiles),
+
+    findall(NewQuantity:Color, (
+        find_dict(Color, Ammounts, OldQuantity),
+    count(UsedTiles, Color, Used), 
+    NewQuantity is OldQuantity - Used
+    ), NewAmmounts),
+    set_dict(ammounts, TempGame, NewAmmounts, TempGame2),
+    enumerate(TempFac, 1, EnumeratedFac),
+    set_dict(center, EnumeratedFac, [first], AllFact),
+    set_dict(factories, TempGame2, AllFact, NewGame).
+    % TODO print ALL Fac
+
+prepare(Game, NewGame) :-
+    find_dict(ammounts, Game, Ammounts),
+    find_dict(factories, Game, Factories),
+    length(Factories, LengthFacts),
+    findall(X, member(X:_, Ammounts), Quantities),
+    sum_list(Quantities, Sum),
+    Sum < LengthFacts*4,!,
+    find_dict(outs, Game, Outs),
+    findall(X:Color, (
+        find_dict(Color, Ammounts, Quantity),
+        find_dict(Color, Outs, QOuts),
+        NewQuantity is QOuts+Quantity
+    ), NewAmmounts),
+
+    set_dict(ammounts, Game, NewAmmounts, TempGame),
+    findall(0:Color, member(_:Color, Outs), NewOuts),
+    set_dict(outs, TempGame, NewOuts, NewGame).
+prepare(Game,Game).
+
+use_factory([], _, []).
+use_factory(Factories, [], Factories).
+use_factory([[]|Factories], Tiles, [[]|Result]) :-
+    use_factory(Factories, Tiles, Result).
+use_factory([[_|Fac1]|Factories], [Tile|Tiles], [[Tile|Res1]|Result]) :-
+    use_factory([Fac1|Factories], Tiles, [Res1|Result]).
+
+run(Game, Events, NewGame) :-
+    order_players(Game, Players),
+    run_round(Game, Players, NewGame, CurrEvents),
+    append(Events, CurrEvents, NewEvents),
+    validate(TempGame,NewEvents, NewGame).
+
+order_players(Game, NewPlayers) :-
+    find_dict(players, Game, Players),
+    sort_by_index(Players, Order).
+    sort_players(Order, NewPlayers).
+
+sort_players(Players, NewPlayers) :-
+    initial_player(Pid),
+    append(A,[Player:Pid|B], Players),
+    append([Player:Pid|B], A, NewPlayers).
+
+initial_player(1).
+
+validate(Game, Events, NewGame) :-
+    find_dict(factories, Game, Factories),
+    findall(Fac, member(Fac:_, Factories), FactoriesList),
+    append_all(FactoriesList, AllTiles),
+    length(AllTiles, Size),
+    count(AllTiles, empty, Size), !,
+    clean_players(Game, TempGame),
+    end_or_continue(TempGame, Events, NewGame).
+validate(Game, Events, NewGame) :-
+    run(Game, Events, NewGame).
+
+end_or_continue(Game, _, NewGame) :-
+    finish(Game), !,
+    get_scores(Game, NewGame).
+end_or_continue(Game, Events, NewGame) :-
+    initial_player(Pid),
+    get_value_or_default(center, Events, NewId, Pid),
+    retract(initial_player(Id)),
+    asserta(initial_player(NewId)),
+    find_dict(players, Game, Players),
+    find_dict(Pid, Players, FirstPlayer),
+    penalize(FirstPlayer, -1,TempPlayer),
+    % TODO print new first Player
+
+    set_dict(NewId, Players, TempPlayer, NewPlayers),
+    set_dict(players, Game, NewPlayers, TempGame),
+    new_round(TempGame, TempGame1),
+    run(TempGame1, [], NewGame).
+
+finish(Game) :-
+    find_dict(players, Game, Players),
+    member(X:_, Players),
+    find_full_row(X,_).
+
+get_value_or_default(P, O, V, _) :-
+    find_dict(P, O, V).
+get_value_or_default(_, _, D, D).
+
+get_scores(Game, NewGame) :-
+    find_dict(players, Game, Players),
+    findall(NewPlayer:Id, (
+        find_dict(Id, Players, Player),
+        wall_score(Player, WallScore),
+        find_dict(score, Player, Score),
+        NewScore is Score + WallScore,
+        set_dict(score, Player, NewScore, NewPlayer)
+    ), NewPlayers),
+    set_dict(players, Game, NewPlayers, NewGame).
+
+wall_score(Player, WallScore) :-
+    full_rows(Player, FullRows),
+    find_dict(wall, Player, Wall),
+    transpose_wall(Wall, TransposedWall),
+    full_rows([TransposedWall:wall], CS),
+    full_colors(Player, DS),
+    WallScore is RS*2+CS*7+10*DS.
+
+full_colors(Player, Ammount) :-
+    find_dict(wall, Player, Wall),
+    findall(true, (member((1,Col), Wall),
+    cascade((1,Col), Wall)), List),
+    length(List, Ammount).
+
+full_rows(Player, RowsQ) :-
+    find_full_row(Player, RowsQ),!.
+full_rows(_, 0).
+
+find_full_row(Player, RowsQ) :-
+    find_dict(table, Player, Wall),
+    findall(true, (
+        bagof(Column, member((_, Column), Wall), Columns),
+        length(Columns, 5)
+    ), Rows),
+    length(Rows, RowsQ),
+    any(Rows).
+
+cascade((5,Col), Wall) :-
+    member((5,Col), Wall).
+cascade((Row,Col), Wall) :-
+    member((Row,Col), Wall),
+    NewRow is Row+1,
+    NewCol is max((Col+1) mod 6, 1),
+    cascade((NewRow, NewCol), Wall).
+
+any(true).
+any(L) :-
+    is_list(L),
+    member(true, L).
