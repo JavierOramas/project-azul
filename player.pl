@@ -156,7 +156,7 @@ penalize(Player, Penalization, NewPlayer) :-
     % se actualiza el score
     set_dict(score, TempPlayer, UpdatedScore, TempPlayer2),
     PnalizationTimes is Penalization+1,
-    % se llama recursivo a penlizar
+    % se llama recursivo a penlizar`
     penalize(TempPlayer2, PnalizationTimes, NewPlayer).
 % si no quedan penalizaciones pendientes se retorna el jugador
 penalize(Player, _, Player).
@@ -262,7 +262,7 @@ clean_line(Player, Line, NewPlayer) :-
 
     % actualiza el score del jugador
     get_column(Line, Color, Column),
-    update_score(Player, (L,Column), TempPlayer),
+    update_score(Player, (Line,Column), TempPlayer),
 
     % Limpia la linea (añade Line veces empty)
     % Actualiza tods los tableros en Player
@@ -306,8 +306,10 @@ genereate_players(N,Players:players) :-
     enumerate(UnorderedPlayers, 1, Players).
 
 valid_moves(Game, Player, Moves) :-
+    % obtiene el tablero del jugador y las factories
     find_dict(factories, Game, Factories),
     find_dict(board, Player, Board),
+    % genera todos los posibles movimientos validos
     findall(LineId:FactoryId:Color, (
         find_dict(LineId, Board, Line),
         find_dict(stocks, Line, Stocks),
@@ -404,7 +406,6 @@ greedy(Game, Player, NewGame, NewPlayer, Move) :-
     % Jugadas validas
     valid_moves(Game, Player, Moves), !,
     % log mode ID
-    
     % genera una lista con todas las jugadas y sus scores
     findall(Score:Move, (
         member(Move, Moves),
@@ -420,7 +421,7 @@ greedy(Game, Player, NewGame, NewPlayer, Move) :-
 
     % Ejecuta la jugada y actualiza el score
     update_player(Player, Game, Move, NewPlayer, Return, _),
-    update_game(Game, Move, NewPlayer, Return).
+    update_game(Game, Move, NewGame, Return).
 
 % Si no puede tomar ninguna para el tablero
 greedy(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
@@ -463,5 +464,22 @@ run_round(Game, [Player:Id| Players], NewGame, [Id:FId| Events]) :-
     % Cede el turno al siguiente jugador
     run_round(NewTempGame, Players, NewGame, Events).
 
-
-% TODO Clean Player
+clean_players(Game, NewGame) :-
+    % obtiene los jugadores
+    find_dict(players, Game, Players),
+    findall(Player:Id, (
+        % toma el tablero de cada jugador
+        member(X:Id, Players),
+        find_dict(board, X, Board),
+        verify_lines(X, Board:unsorted, CleanedPlayer),
+        % info_log([[CleanedPlayer:player, Id:id]:player]),
+        % genera el piso y lo asigna al jugador
+        generate_floor(Penalizations),
+        set_dict(penalization, CleanedPlayer, Penalizations, NewPlayer),
+        % asigna score 0 al jugador
+        find_dict(score, NewPlayer, CurScore),
+        Score is max(CurScore, 0),
+        set_dict(score, NewPlayer, Score, Player)
+    ), NewPlayers),
+    % asigna los nuevos jugadores al nuevo juego
+    set_dict(players, Game, NewPlayers, NewGame).
