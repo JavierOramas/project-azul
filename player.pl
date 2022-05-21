@@ -27,22 +27,34 @@ enumerate([E1|List], Number, [E1-Number|R]) :-
     enumerate(List, Number1, R).
 
 consecutive([(X, B)|L], (X,Y), C, R) :-
+    % verifica si el segundo punto de la lista es adyacente al primero
     B is Y+1, !,
+    % verifica el resto
     consecutive(L, (X,B), A,R),
+    % Añade a la lista el punto que fue adyacente
     append([(X,B)], A,C).
+% Si no tiene más adyacentes, retorna una lista vacía
 consecutive(L,_,[],L).
 
+% Encuentra todos los elementos en adyacentes en la lista, si no hay elementos, devuelve una lista vacía
 adj([],[]).
 adj([X|L], I) :-
+    % Busca los consecutivos al principio
     consecutive(L,X,C,R),
+    % los añade a la lista de retorno
     append([X],C,B),
+    % busca el proximo bloque de adyacentes
     adj(R,K),
+    % añade el resto de los adyacentes a la lista actual
     append([B], K, I).
 
-
+% busca los elementos adyacentes a un elemento en la lista
 find_adj(L, I) :-
+    % si es un solo elemento no hay adyacentes
     is_list(L),
+    % ordena los elementos
     sort(L,S),
+    % genera la lista de todos los adyacentes
     adj(S,I).
 
 find_index(V,L,I) :-
@@ -62,8 +74,11 @@ count(L, X, N) :-
 
 % Sort list by index
 sort_by_index(L, R) :-
+    % invierte el diccionario
     findall(X:Y, find_dict(X, L, Y), L1),
+    % ordena por el index
     sort(L1, R1),
+    % vuelve a invertir el xiccionario
     findall(X:Y, find_dict(X, R1, Y), R).
 
 % Reemplaza las primeras K ocurrencias en L de V por X en R
@@ -128,6 +143,7 @@ penalize(Player, Penalization, NewPlayer) :-
     penalize(TempPlayer2, PnalizationTimes, NewPlayer).
 penalize(Player, _, Player).
 
+% transpone el muro
 transpose_wall(L,R) :-
     findall((Y,X), member((X,Y), L), R).
 
@@ -251,31 +267,45 @@ valid_moves(Game, Player, Moves) :-
     ),
     not(length(Moves,0)).
 
+% Obtiene las formas de las cuales se puede tomar piezas de las factories
 available_colors(Game, Moves) :-
+    % Obtiene todas las factories
     find_dict(factories, Game, Factories),
+    % Obtiene todas las formas de tomar piezas de una factory
     findall(Count:FactoryId:Color, (
         find_dict(FactoryId, Factories, ThisFactory),
         member(Color, ThisFactory),
         Color \= empty,
         count(ThisFactory, Color, Count)
     ), Moves),
+
     not(length(Moves,0)).
 
 update_player(Player, Game, Line:Factory:Color, NewPlayer, OutTiles, FinalPlayer) :-
+    % Actualiza la linea en la zona de preparación del jugador
     update_line(Player, Game, Line:Factory:Color, TempPlayer, Diff, Ammount),
+    % Obtiene el Tablero del jugador
     find_dict(board, TempPlayer, Board),
     % TODO Print Player Mode
+    % Verifica si alguna de las filas de preparación se llenó
     verify_lines(TempPlayer, Board:unordered, FinalPlayer),
+
+    % penaliza al jugador con la cantidad de piezas que no pudo poner en la zona de preparación
     OutTiles is Ammount-Diff,
     penalize(TempPlayer, Diff, NewPlayer).
 
+% Actualiza todo el tablero
 update_game(Game, _:Factory:Color, NewGame, OutTiles) :-
+    % Obtiene la información de las fabricas
     find_dict(factories, Game, Factories),
     find_dict(Factory, Factories, FactoryData),
+    % Mueve las piezas no tomadas al centro
     findall(X, (
         member(X, FactoryData),
         not(member(X, [empty, first,Color]))
     ), CenterTiles),
+
+    % generamos una factory nueva para sustituir la antigua
     add([], 4, empty, NewFactory),
     set_dict(Factory, Factories, NewFactory, TemporalFactories),
     find_dict(center, TemporalFactories, Center),
@@ -316,25 +346,39 @@ basic(Game, Player, Game, Player, none:none:none).
 % Escoge el que maximice el score
 % Si no existe, el que minimice la penalización
 greedy(Game, Player, NewGame, NewPlayer, Move) :-
+    % Jugadas validas
     valid_moves(Game, Player, Moves), !,
     % log mode ID
+    
+    % genera una lista con todas las jugadas y sus scores
     findall(Score:Move, (
         member(Move, Moves),
         update_player(Player, Game, Move, _, _, TempPlayer),
         find_dict(score, TempPlayer, Score)
         ), Options
     ),
+    % ordena la lista de menor a mayor
     sort(Options, Sorted),
+    % toma la ultima jugada
     append(_, [_:Move], Sorted),
     % Set Mode ID
+
+    % Ejecuta la jugada y actualiza el score
     update_player(Player, Game, Move, NewPlayer, Return, _),
     update_game(Game, Move, NewPlayer, Return).
+
+% Si no puede tomar ninguna para el tablero
 greedy(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
+    % Obtiene todas las jugadas válidas
     available_colors(Game, Moves), !,
+    % Ordena la lista de mayor a menor por la cantidad de piezas
     sort(Moves, [Ammount:Id:Color|_]),
+    % Toma la que tenga menor cantidad de piezas
     update_game(Game, none:Id:Color, NewGame, Ammount),
+    %  Calcula la penlización y lo penaliza
     Neg is Ammount * -1,
     penalize(Player, Neg, NewPlayer).
+% Si no puede jugar pasa el turno
 greedy(Game, Player, Game, Player, none:none:none).
 
 
