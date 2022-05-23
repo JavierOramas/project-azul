@@ -1,8 +1,11 @@
+
+:- (dynamic initial_player/1).
+
 % Tools 
 
 % % % Dictionary Tools
 find_dict(Key, Value, Dict) :-
-    member(Key:Value, Dict).
+    member(Dict:Key, Value).
 
 any(true).
 any(L) :-
@@ -10,29 +13,30 @@ any(L) :-
     member(true, L).
 
 del_dict(_, [], []).
-del_dict(Key, [_:Key|T], L) :- !, del_dict(Key, T, L).
+del_dict(Key, [_:Key|T], L) :- !,
+    del_dict(Key, T, L).
 del_dict(Key, [X:Y|T], [X:Y|L]) :-
     Y \= Key,
     del_dict(Key, T, L).
 
 set_dict(Key, Value, Dict, FinalDict) :-
-    del_dict(Key, Dict, NewDict),
-    concat([Key:Value], NewDict, FinalDict).
+    del_dict(Key, Value, NewDict),
+    append([Dict:Key], NewDict, FinalDict).
 
 append_all([], []).
 append_all([X|Y], R) :-
     append_all(Y, L),
-    concat(X, L, R).
+    append(X, L, R).
 
 add(L, 0, _, L).
 add(L,K,X,R) :-
     K>0,
     P is K-1,
-    concat(L, [X], L1),
+    append(L, [X], L1),
     add(L1, P, X, R).
 
 enumerate([], _, []).
-enumerate([E1|List], Number, [E1-Number|R]) :-
+enumerate([E1|List], Number, [E1:Number|R]) :-
     Number1 is Number+1,
     enumerate(List, Number1, R).
 
@@ -133,15 +137,18 @@ generate_floor([-1,-1,-2,-2,-2,-3,-3]:penalizations).
 % Genera tablero en escalera para fase de preparación
 generate_board(Data:board):-
     % Genera una lista de listas de longitud 5
+    writeln("Generando Tablero\n"),
     add([], 5, 1, List),
     enumerate(List, 1, Enum),
     list_colors(C),
-
     % asigna los colores válidos a cada fila
     findall([New:stocks, C:valid, C:all]:Sz,
-        (find_dict(Sz, Enum, _),
-    add([], Sz, empty, New)
-    ), Data:board).
+        (
+        member(_:Sz, Enum),
+        % find_dict(Sz, Enum, _),
+        add([], Sz, empty, New)),
+        Data).
+
 
 % Game
 
@@ -302,17 +309,23 @@ genereate_players(N,Players:players) :-
     % El tablero en forma de escalera donde se almacenan las piezas
     % durante la fase de preparación
     generate_board(Board),
+    writeln("Generando Piso\n"),
     % Tablero de penalización
     generate_floor(Floor),
+
+    writeln("Generando Jugadores\n"),
     % Asigna a cada jugador un tablero de cada tipo, además creal el muro 
     % y define el score = 0
     add([], N, [Board, Floor, []:wall, 0:score], List),
+    % writeln(List),
     findall(P, (
         member(X, List),
         select_strategy(S),
+        writeln("Creado un jugador con estrategia "+S),
         set_dict(strategy, X,S,P)
     ), UnorderedPlayers),
     % Ordena los jugadores
+    writeln("Ordenando los jugadores\n"),
     enumerate(UnorderedPlayers, 1, Players).
 
 valid_moves(Game, Player, Moves) :-
@@ -498,6 +511,7 @@ start_game(Players, Factories) :-
     % genera los jugdores y los las factories en el Game
     generate_game(Players, Factories, Game),
     % inicia la ronda
+    writeln("Iniciando juego"),
     new_round(Game, NewGame),
     run(NewGame, [], EndedGame),
 
@@ -516,21 +530,27 @@ generate_game(Players, Factories, [P, A:ammounts, O:outs, F:factories]) :-
     % genera los jugadores
     genereate_players(Players, P),
 
+    writeln("Jugadores Generados\n"),
+
     % Guarda las piezas  en la bolsa y fuera de la misma
     findall(20:X, member(X,Colors), A),
     findall(0:X, member(X,Colors), O),
 
-    % rellena las factoriesy las enumera
+    writeln("LLenando Factories\n"),
+    % rellena las factories y las enumera
     add([], 4, empty, E),
     add([], Factories, E, EF),
+    writeln(Factories),
     enumerate(EF,1,NF),
-    set_dict(center, NF, [], F).
-
+    set_dict(center, NF, [], F),
+    writeln("Factories Generadas\n").
 
 new_round(Game, NewGame) :-
+    writeln(Game),
     % garantiza que las factories estén llenas con colores validos
     populate(Game, TempGame),
     find_dict(ammounts, TempGame, Ammounts),
+    writeln(Ammounts),
     findall(List, (
         find_dict(Color, Ammounts, Quant),
         add([], Quant, Color, List)
@@ -553,27 +573,36 @@ new_round(Game, NewGame) :-
     enumerate(TempFac, 1, EnumeratedFac),
     set_dict(center, EnumeratedFac, [first], AllFact),
     set_dict(factories, TempGame2, AllFact, NewGame).
-    % TODO print ALL Fac
+    % writeln(AllFact).
 
 % Garantiza que estén llenas las factories
 populate(Game, NewGame) :-
     % obtiene las piezas en la bolsa y las factories
     find_dict(ammounts, Game, Ammounts),
-    find_dict(factories, Game, Factories),
+    % find_dict(factories, Game, Factories),
+    member(Factories:factories, Game),
+    writeln(Factories),
     length(Factories, FacSz),
-    findall(X, member(X:_, Amounts), Quantities),
+    % writeln(FacSz),
+    findall(X, member(X:_, Ammounts), Quantities),
+    % writeln("En la bolsa hay"+Ammounts+"\n"),
+    writeln(Quantities),
+    % writeln(Quantities)
     sum_list(Quantities, Sum),
+    % print Sum
+    writeln("En la bolsa hay "+Sum+" piezas\n"),
+    % writeln(" piezas\n"),
     % si la cantidad de piezas que quedan en la bolsa no es suficiente para llenar las factories
     Sum<FacSz*4, !,
     find_dict(outs, Game, Outs),
-    % debug_log(["Adding more tiles to the bag.\n\t", Amounts:amounts, "\n\t", Outs:outs]),
+    % debug_log(["Adding more tiles to the bag.\n\t", Ammounts:Ammounts, "\n\t", Outs:outs]),
     % añade las piezas a la bolsa
-    findall(RealAmount:Color, (
-        find_dict(Color, Amounts, QAmount),
+    findall(RealAmmount:Color, (
+        find_dict(Color, Ammounts, QAmmount),
         find_dict(Color, Outs, QOut),
-        RealAmount is QOut+QAmount
-    ), NewAmounts),
-    set_dict(amounts, Game, NewAmounts, TempGame),
+        RealAmmount is QOut+QAmmount
+    ), NewAmmounts),
+    set_dict(Ammounts, Game, NewAmmounts, TempGame),
     % Indica que quedan 0 piezas fuera
     findall(0:Color, member(_:Color, Outs), NewOuts),
     set_dict(outs, TempGame, NewOuts, NewGame).
@@ -595,7 +624,7 @@ run(Game, Events, NewGame) :-
     % ordena los jugadores para empezar la ronda
     order_players(Game, Players),
     % ejecuta la ronda
-    run_round(Game, Players, NewGame, CurrEvents),
+    run_round(Game, Players, TempGame, CurrEvents),
     % guarda los nuevos eventos en la lista de eventos
     append(Events, CurrEvents, NewEvents),
     % verifica que se pueda seguir jugando
@@ -605,7 +634,7 @@ order_players(Game, NewPlayers) :-
     % obtiene los jugadores
     find_dict(players, Game, Players),
     % ordena según el index
-    sort_by_index(Players, Order).
+    sort_by_index(Players, Order),
     % retorna la lista ordenada de los nuevos jufadores
     sort_players(Order, NewPlayers).
 
@@ -620,7 +649,6 @@ sort_players(Players, NewPlayers) :-
 
 % Dynamic que guarda el jugador que inicia la ronda
 initial_player(1).
-
 
 validate(Game, Events, NewGame) :-
     % obtiene el estado de las factories
@@ -645,7 +673,7 @@ end_or_continue(Game, Events, NewGame) :-
     % si no, obtener nuevo jugador inicial
     initial_player(Pid),
     get_value_or_default(center, Events, NewId, Pid),
-    retract(initial_player(Id)),
+    retract(initial_player(Pid)),
     asserta(initial_player(NewId)),
     % lo penaliza por tomar la pieza del centro
     find_dict(players, Game, Players),
@@ -698,11 +726,11 @@ wall_score(Player, WallScore) :-
     % transpone el muro
     transpose_wall(Wall, TransposedWall),
     % revisa si hay una fila (Columna en el muro original) completa
-    full_rows([TransposedWall:wall], CS),
+    full_rows([TransposedWall:wall], FullCols),
     % revisa si hay un color completo
-    full_colors(Player, DS),
+    full_colors(Player, FullColors),
     % otorga los puntajes de cada una de las cosas anteriores al score del muro
-    WallScore is RS*2+CS*7+10*DS.
+    WallScore is FullRows*2+FullCols*7+10*FullColors.
 
 % revisa si un color está completo en el muro
 full_colors(Player, Ammount) :-
