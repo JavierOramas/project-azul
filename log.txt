@@ -1,0 +1,1386 @@
+[Preparing a ,2, players Game]
+Starts New Round
+[Player ,1, turn start --------------------]
+[Player new preparation line ,1, is -> ,[red]]
+[Player choose all type ,red, from expositor ,1, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[empty,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,1, is -> ,[yellow]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[empty,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,2, is -> ,[black,empty]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[white,empty]]
+[Player choose all type ,white, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,2, is -> ,[black,black]]
+[Player choose all type ,black, from expositor ,2, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[empty,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[white,white]]
+[Player choose all type ,white, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[empty,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,3, is -> ,[blue,empty,empty]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[red,empty,empty]]
+[Player choose all type ,red, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[red,empty,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,3, is -> ,[blue,blue,blue]]
+[Player choose all type ,blue, from expositor ,4, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[red,red,empty]]
+[Player choose all type ,red, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[red,red,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[white,empty,empty,empty]]
+[Player choose all type ,white, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[white,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[red,red,red]]
+[Player choose all type ,red, from expositor ,3, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[red,red,red, - , - ]
+[empty,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[white,white,empty,empty]]
+[Player choose all type ,white, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[white,white,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,empty,empty,empty]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[red,red,red, - , - ]
+[yellow,empty,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[white,white,white,empty]]
+[Player choose all type ,white, from expositor ,5, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[white,white,white,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,yellow,empty,empty]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[red,red,red, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,5, is -> ,[black,black,black,empty,empty]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[red, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[white,white,white,empty, - ]
+[black,black,black,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player choose all type ,none, from expositor ,none, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[white,white, - , - , - ]
+[red,red,red, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player recive ,-1, of penalization]
+Starts New Round
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[blue,empty,empty]]
+[Player choose all type ,blue, from expositor ,1, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[blue,empty,empty, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,3, is -> ,[red,empty,empty]]
+[Player choose all type ,red, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,empty,empty, - , - ]
+[white,white,white,empty, - ]
+[black,black,black,empty,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[blue,blue,empty]]
+[Player choose all type ,blue, from expositor ,2, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[blue,blue,empty, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,3, is -> ,[red,red,empty]]
+[Player choose all type ,red, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[white,white,white,empty, - ]
+[black,black,black,empty,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[blue,blue,blue]]
+[Player recive ,-1, of penalization]
+[Player choose all type ,blue, from expositor ,3, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[blue,blue,blue, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,2, is -> ,[yellow,yellow]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[red,red,empty, - , - ]
+[white,white,white,empty, - ]
+[black,black,black,empty,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[black,black]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,1, is -> ,[white]]
+[Player recive ,-1, of penalization]
+[Player choose all type ,white, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[white, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[red,red,empty, - , - ]
+[white,white,white,empty, - ]
+[black,black,black,empty,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,1, is -> ,[blue]]
+[Player choose all type ,blue, from expositor ,4, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[yellow,yellow,empty,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,5, is -> ,[black,black,black,black,black]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[white, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[red,red,empty, - , - ]
+[white,white,white,empty, - ]
+[black,black,black,black,black]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,yellow,yellow,empty]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[empty,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[white,white,white,white]]
+[Player recive ,-1, of penalization]
+[Player choose all type ,white, from expositor ,5, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[white, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[red,red,empty, - , - ]
+[white,white,white,white, - ]
+[black,black,black,black,black]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,5, is -> ,[blue,empty,empty,empty,empty]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[black,black, - , - , - ]
+[blue,blue,blue, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - , - ,yellow, - , - ]
+[white, - , - , - , - ]
+[ - , - , - ,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player recive ,-2, of penalization]
+[Player choose all type ,black, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[white, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[red,red,empty, - , - ]
+[white,white,white,white, - ]
+[black,black,black,black,black]
+
+Wall of Player: 
+
+[ - ,red, - , - , - ]
+[ - , - , - , - ,black]
+[ - , - ,blue, - , - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player recive ,-2, of penalization]
+Starts New Round
+[Player ,1, turn start --------------------]
+[Player new preparation line ,5, is -> ,[red,empty,empty,empty,empty]]
+[Player choose all type ,red, from expositor ,1, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[red,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[black,empty,empty]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[black,empty,empty, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - , - ]
+[white, - , - , - ,black]
+[ - , - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,5, is -> ,[red,red,red,empty,empty]]
+[Player choose all type ,red, from expositor ,3, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[red,red,red,empty,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[black,black,empty]]
+[Player choose all type ,black, from expositor ,4, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[black,black,empty, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - , - ]
+[white, - , - , - ,black]
+[ - , - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,5, is -> ,[red,red,red,red,empty]]
+[Player choose all type ,red, from expositor ,5, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[empty,empty,empty,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[black,black,black]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[black,black,black, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - , - ]
+[white, - , - , - ,black]
+[ - , - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,empty,empty,empty]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[blue,empty,empty,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[yellow,yellow]]
+[Player recive ,-2, of penalization]
+[Player recive ,-2, of penalization]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[black,black,black, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - , - ]
+[white, - , - , - ,black]
+[ - , - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,blue,empty,empty]]
+[Player choose all type ,blue, from expositor ,2, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,empty,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,1, is -> ,[white]]
+[Player recive ,-2, of penalization]
+[Player recive ,-3, of penalization]
+[Player recive ,-3, of penalization]
+[Player choose all type ,white, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[white, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[black,black,black, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - , - ]
+[white, - , - , - ,black]
+[ - , - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,1, is -> ,[yellow]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[yellow, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,empty,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red, - , - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player choose all type ,none, from expositor ,none, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[white, - , - , - , - ]
+[yellow,yellow, - , - , - ]
+[black,black,black, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - , - ]
+[white, - , - , - ,black]
+[ - , - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+Starts New Round
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[yellow,yellow,empty]]
+[Player choose all type ,yellow, from expositor ,1, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[yellow,yellow,empty, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,1, is -> ,[blue]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,empty,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[yellow,yellow,yellow]]
+[Player choose all type ,yellow, from expositor ,4, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[yellow,yellow,yellow, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,blue,blue,empty]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,blue,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[red,empty]]
+[Player choose all type ,red, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[red,empty, - , - , - ]
+[yellow,yellow,yellow, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,blue,blue,blue]]
+[Player recive ,-2, of penalization]
+[Player choose all type ,blue, from expositor ,2, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,blue,blue, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[red,red]]
+[Player choose all type ,red, from expositor ,3, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[red,red, - , - , - ]
+[yellow,yellow,yellow, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,2, is -> ,[blue,blue]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[blue,blue, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,blue,blue, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,1, is -> ,[black]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[black, - , - , - , - ]
+[red,red, - , - , - ]
+[yellow,yellow,yellow, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,empty,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player recive ,-3, of penalization]
+[Player choose all type ,white, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[blue,blue, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,blue,blue, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,5, is -> ,[blue,blue,empty,empty,empty]]
+[Player choose all type ,blue, from expositor ,5, and add them to the ,5, line]
+Preparation Zone of Player: 
+
+[black, - , - , - , - ]
+[red,red, - , - , - ]
+[yellow,yellow,yellow, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player recive ,-3, of penalization]
+[Player choose all type ,black, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[blue,blue, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,blue,blue, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,yellow,yellow,yellow]]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[black, - , - , - , - ]
+[red,red, - , - , - ]
+[yellow,yellow,yellow, - , - ]
+[yellow,yellow,yellow,yellow, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow, - ,white]
+[white, - , - ,yellow,black]
+[black, - ,blue,red, - ]
+[ - , - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player choose all type ,white, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[blue, - , - , - , - ]
+[blue,blue, - , - , - ]
+[red,red,empty, - , - ]
+[blue,blue,blue,blue, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[ - ,red,yellow, - ,white]
+[ - , - , - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white, - , - ]
+[ - , - ,black, - , - ]
+
+Starts New Round
+[Añadiendo piezas a la bolsa.
+	,[2:blue,7:red,5:yellow,3:black,3:white]:amounts,
+	,[13:white,9:yellow,12:black,10:blue,4:red]:outs]
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,yellow,empty,empty]]
+[Player choose all type ,yellow, from expositor ,1, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,empty,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,empty,empty,empty]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[blue,empty,empty,empty, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,yellow,yellow,empty]]
+[Player choose all type ,yellow, from expositor ,2, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,yellow,empty, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,blue,empty,empty]]
+[Player choose all type ,blue, from expositor ,center, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[blue,blue,empty,empty, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,4, is -> ,[yellow,yellow,yellow,yellow]]
+[Player choose all type ,yellow, from expositor ,3, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,yellow,yellow, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,4, is -> ,[blue,blue,blue,blue]]
+[Player choose all type ,blue, from expositor ,4, and add them to the ,4, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[empty,empty,empty, - , - ]
+[blue,blue,blue,blue, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,2, is -> ,[red,empty]]
+[Player choose all type ,red, from expositor ,center, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[red,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,yellow,yellow, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,3, is -> ,[white,white,white]]
+[Player choose all type ,white, from expositor ,center, and add them to the ,3, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[empty,empty, - , - , - ]
+[white,white,white, - , - ]
+[blue,blue,blue,blue, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player new preparation line ,1, is -> ,[black]]
+[Player choose all type ,black, from expositor ,center, and add them to the ,1, line]
+Preparation Zone of Player: 
+
+[black, - , - , - , - ]
+[red,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,yellow,yellow, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player new preparation line ,2, is -> ,[blue,empty]]
+[Player choose all type ,blue, from expositor ,5, and add them to the ,2, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[blue,empty, - , - , - ]
+[white,white,white, - , - ]
+[blue,blue,blue,blue, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player choose all type ,black, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[black, - , - , - , - ]
+[red,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,yellow,yellow, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player choose all type ,yellow, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[blue,empty, - , - , - ]
+[white,white,white, - , - ]
+[blue,blue,blue,blue, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+[Player ,1, turn start --------------------]
+[Player choose all type ,white, from expositor ,center, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[black, - , - , - , - ]
+[red,empty, - , - , - ]
+[red,red,empty, - , - ]
+[yellow,yellow,yellow,yellow, - ]
+[red,red,red,red,empty]
+
+Wall of Player: 
+
+[blue,red,yellow, - ,white]
+[ - ,blue, - ,yellow,black]
+[ - , - ,blue, - , - ]
+[ - , - ,white,blue, - ]
+[ - , - ,black, - , - ]
+
+[Player ,2, turn start --------------------]
+[Player choose all type ,none, from expositor ,none, and add them to the ,none, line]
+Preparation Zone of Player: 
+
+[empty, - , - , - , - ]
+[blue,empty, - , - , - ]
+[white,white,white, - , - ]
+[blue,blue,blue,blue, - ]
+[blue,blue,empty,empty,empty]
+
+Wall of Player: 
+
+[blue, - ,yellow,black,white]
+[white, - ,red,yellow,black]
+[black, - ,blue,red,yellow]
+[yellow, - , - , - , - ]
+[ - , - , - , - , - ]
+
+The game ends. And the Winner is... 
+🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁
+
+Player 2 => 47
+Player 1 => 29
