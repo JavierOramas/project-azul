@@ -293,10 +293,26 @@ calculate_scores(Game, NewGame) :-
     ), NewPlayers),
     set_dict(players, Game, NewPlayers, NewGame).
 
-% TODO
 print_scores(EndedGame:scores) :-
+
     open("log.txt", append, FD),
-    write(FD,"Not implemented yet\n"),
+    find_dict(players, EndedGame, Players),
+    nl(FD),
+    findall([Id:id, Strategy:strategy]:Score, ( 
+        member(X:Id, Players),
+        find_dict(score, X, Score),
+        find_dict(strategy, X, Strategy)
+    ), PlayersInverted),
+    indexed_sort(PlayersInverted, PlayersSorted),
+    reverse(PlayersSorted, P),
+    findall(P, (
+        member([Id:_|_]:Score, P),
+        write(FD,"Player "),
+        write(FD, Id),
+        write(FD," => "),
+        write(FD,Score),
+        nl(FD)
+        ),_),
     close(FD).
 
 start_game(Players, Factories) :-
@@ -308,7 +324,7 @@ start_game(Players, Factories) :-
     new_round(Game, NewGame),
     run(NewGame, [], EndedGame), !,
     open("log.txt", append, Fd),
-    write(Fd, "The game ends. And the Winer is... \n"),
+    write(Fd, "The game ends. And the Winner is... \n"),
     write(Fd, "🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁🥁\n"),
     close(Fd),
     print_scores(EndedGame:scores).
