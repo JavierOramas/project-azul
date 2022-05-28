@@ -1,6 +1,7 @@
+% Game valid colors
+get_colors([blue, red, yellow, black, white]).
 
-tiles_colors([blue, red, yellow, black, white]).
-
+% prints Text if the first param is 1
 if_print(1, Text):-
     open('log.txt', append, Stream),
     write(Stream, Text),
@@ -8,6 +9,7 @@ if_print(1, Text):-
     close(Stream).
 if_print(_, _).
 
+% Adds L to X K times, result in L1
 add(L, 0, _, L).
 add(L, K, X, R) :-
     K>0,
@@ -15,44 +17,55 @@ add(L, K, X, R) :-
     append(L, [X], L1),
     add(L1, P, X, R).
 
+% true if the param is list
 isList([]).
 isList([_|_]).
 
-append_all([], []).
-append_all([X|Y], R) :-
-    append_all(Y, L),
-    append(X, L, R).
-
+% true if list has any element
 any(true).
 any(L) :-
     isList(L),
     member(true, L).
 
-consecutive([(X, B)|L],  (X, Y), C, R) :-
+% returns list of all tiles in the same row/column in C
+% returns list rest of the tiles in R
+get_adj([(X, B)|L],  (X, Y), C, R) :-
     B is Y+1, !,
-    consecutive(L,  (X, B), A, R),
+    get_adj(L,  (X, B), A, R),
     append([(X, B)], A, C).
-consecutive(L, _, [], L).
+get_adj(L, _, [], L).
 
-blocks([], []).
-blocks([X|L], I) :-
-    consecutive(L, X, C, R),
+% returns list of all tiles ajdacent in list
+adjacent([], []).
+adjacent([X|L], I) :-
+    get_adj(L, X, C, R),
     append([X], C, B),
-    blocks(R, K),
+    adjacent(R, K),
     append([B], K, I).
 
-make_intervals(L, I) :-
+% sorts adjacents lists and returns it
+get_all_adjacent(L, I) :-
     isList(L),
     sort(L, S),
-    blocks(S, I).
+    adjacent(S, I).
 
+% gets Ith element in L
+% returnsnvalue in V
+find_index(V, L, I) :-
+    append(A, [V|_], L),
+    length(A, I).
+find_index(_, _, -1).
+
+% Find value:property
 find_dict(P, O, V) :-
     member(V:P, O).
 
-get_value_or_default(P, O, V, _) :-
+% find value:property, if not found returns Default
+if_find_else_default(P, O, V, _) :-
     find_dict(P, O, V).
-get_value_or_default(_, _, D, D).
+if_find_else_default(_, _, D, D).
 
+% deletes value:property 
 del_dict(_, [], []).
 del_dict(P, [_:P|R], L) :- !,
     del_dict(P, R, L). 
@@ -60,13 +73,12 @@ del_dict(P, [X:Y|R], [X:Y|L]) :-
     Y\=P,
     del_dict(P, R, L).
 
+% updates value:property
 set_dict(P, O, V, N) :-
     del_dict(P, O, C),
     append([V:P], C, N).
 
-invert_axis(L, R) :-
-    findall((Y, X), member((X, Y), L), R).
-
+% replaces T first occurrences of V with N in R
 replace(L, 0, _, _, L) :- !.
 replace(L, _, V, _, L) :-
     not(member(V, L)), !.
@@ -77,16 +89,19 @@ replace(L, T, V, N, R) :-
     replace(B, Z, V, N, K),
     append(A, [N|K], R).
 
-index_of(V, L, I) :-
-    append(A, [V|_], L),
-    length(A, I).
-index_of(_, _, -1).
+% joins a list of lists/elements in a single list
+append_all([], []).
+append_all([X|Y], R) :-
+    append_all(Y, L),
+    append(X, L, R).
 
-column_of(Line, Color, Column) :-
-    tiles_colors(Colors),
-    index_of(Color, Colors, Idx),
-    Column is (Idx+Line-1)mod 5+1.
+% returns index of the column in the wall given line and color
+find_column(Line, Color, Column) :-
+    get_colors(Colors),
+    find_index(Color, Colors, Idx),
+    Column is ((Idx+Line-1)mod 5 ) +1.
 
+% Counts the occurences of V elements in L
 count(L, V, R) :-
     findall(1, member(V, L), K),
     length(K, R).
@@ -96,59 +111,61 @@ enumerate([E1|List], Number, [E1:Number|Enum]) :-
     Next is Number+1,
     enumerate(List, Next, Enum).
 
+% transposes wall _ => | to find full rows/columns
+transpose_wall(L, R) :-
+    findall((Y, X), member((X, Y), L), R).
+
+% sorts list by index
 indexed_sort(L, R) :-
+    % reverses X:Y -> Y:X
     findall(X:Y, find_dict(X, L, Y), I),
+    % sorts
     sort(I, O),
+    % reverses Y:X -> X:Y
     findall(X:Y, find_dict(X, O, Y), R).
 
+% dynamic variable that stores the current first player
 :- (dynamic initial_player/1).
 initial_player(1).
 
-use_fac([], _, []).
-use_fac(Factories, [], Factories).
-use_fac([[]|Factories], Tiles, [[]|Result]) :-
-    use_fac(Factories, Tiles, Result).
-use_fac([[_|Fac1]|Factories], [Tile1|Tiles], [[Tile1|Res1]|Result]) :-
-    use_fac([Fac1|Factories], Tiles, [Res1|Result]).
+% Fills factory with Tiles, returns it in Factories
+fill_fact([], _, []).
+fill_fact(Factories, [], Factories).
+fill_fact([[]|Factories], Tiles, [[]|Result]) :-
+    fill_fact(Factories, Tiles, Result).
+fill_fact([[_|Fac1]|Factories], [Tile1|Tiles], [[Tile1|Res1]|Result]) :-
+    fill_fact([Fac1|Factories], Tiles, [Res1|Result]).
 
+% prepares the game for next round
+% checks if its possible to run next round with the remaining tiles
 populate(Game, NewGame) :-
-    find_dict(amounts, Game, Amounts),
+    find_dict(ammounts, Game, Ammounts),
     find_dict(factories, Game, Factories),
     length(Factories, FacSz),
-    findall(X, member(X:_, Amounts), Quantities),
+    findall(X, member(X:_, Ammounts), Quantities),
     sum_list(Quantities, Sum),
     % check if the tiles could full the factories
     Sum<FacSz*4, !,
     find_dict(outs, Game, Outs),
     open("log.txt", append, FD),
-    write(FD,["Añadiendo piezas a la bolsa.\n\t", Amounts:amounts, "\n\t", Outs:outs]),
+    write(FD,["Añadiendo piezas a la bolsa.\n\t", Ammounts:ammounts, "\n\t", Outs:outs]),
     nl(FD),
     close(FD),
     % adding tiles to the bag
-    findall(RealAmount:Color, (
-        find_dict(Color, Amounts, QAmount),
+    findall(RealAmmount:Color, (
+        find_dict(Color, Ammounts, QAmmount),
         find_dict(Color, Outs, QOut),
-        RealAmount is QOut+QAmount
-    ), NewAmounts),
-    set_dict(amounts, Game, NewAmounts, TempGame),
+        RealAmmount is QOut+QAmmount
+    ), NewAmmounts),
+    set_dict(ammounts, Game, NewAmmounts, TempGame),
     % Saving that 0 tiles are out
     findall(0:Color, member(_:Color, Outs), NewOuts),
     set_dict(outs, TempGame, NewOuts, NewGame).
 populate(Game, Game).
 
-% split_fac(_, _, [], Top, Bottom, [Top, Bottom]):-
-%     open("log.txt", append, FD),
-%     write(Top),
-%     write(Bottom),
-%     close(FD).
-% split_fac(Len, Cur, [X|Data], Acum, Bottom, R) :-
-%     NewCur is Cur+1,
-%     NewCur=<Len,
-%     concat(Acum, [X], NewAcum),
-%     split_fac(Len, NewCur, Data, NewAcum, Bottom, R), !.
-% split_fac(Len, _, Data, Top, Bottom, [T, B]) :-
-%     split_fac(Len, 0, Data, Bottom, Top, [B, T]).
-
+% checks the factories
+% prepares new round
+% counts the tiles
 new_round(Game, NewGame) :-
     open("log.txt", append, FD),
     write(FD,"Starts New Round\n"),
@@ -156,9 +173,9 @@ new_round(Game, NewGame) :-
     % Check if more tiles are needed
     populate(Game, TempGame1),
     %Select the random tiles to add
-    find_dict(amounts, TempGame1, Amounts),
+    find_dict(ammounts, TempGame1, Ammounts),
     findall(List, ( 
-        find_dict(Color, Amounts, Quantity),
+        find_dict(Color, Ammounts, Quantity),
         add([], Quantity, Color, List)
     ), ColorGroups),
     append_all(ColorGroups, ColorsList),
@@ -167,20 +184,21 @@ new_round(Game, NewGame) :-
     find_dict(factories, TempGame1, GameFac),
     del_dict(center, GameFac, SimpleFac),
     findall(Fac, member(Fac:_, SimpleFac), RawFac),
-    use_fac(RawFac, ColorsOrder, TempFac),
+    fill_fact(RawFac, ColorsOrder, TempFac),
     append_all(TempFac, UsedTiles),
-    % Update the amount of tiles, and create the new game
+    % Update the ammount of tiles, and create the new game
     findall(NewQ:Color, ( 
-        find_dict(Color, Amounts, QOld),
+        find_dict(Color, Ammounts, QOld),
         count(UsedTiles, Color, Used),
         NewQ is QOld-Used
-    ), NewAmounts),
-    set_dict(amounts, TempGame1, NewAmounts, TempGame2),
+    ), NewAmmounts),
+    set_dict(ammounts, TempGame1, NewAmmounts, TempGame2),
     enumerate(TempFac, 1, EnumFac),
     set_dict(center, EnumFac, [first], AllFac),
     set_dict(factories, TempGame2, AllFac, NewGame).
     % split_fac(2,0,AllFac:factories,[],[], _).
 
+% checks for full rows in the board
 any_full_row(Player, RowsQ) :-
     find_dict(wall, Player, Wall),
     findall(true, ( 
@@ -190,6 +208,7 @@ any_full_row(Player, RowsQ) :-
     length(Rows, RowsQ),
     any(Rows).
 
+% if a player has full rows, the game ends 
 ending_condition(Game) :-
     find_dict(players, Game, P),
     member(X:_, P),
@@ -199,6 +218,9 @@ full_rows(Player, RowsQ) :-
     any_full_row(Player, RowsQ), !.
 full_rows(_, 0).
 
+% verify full color in the wall
+% verifies i+1 pos in the next line
+% if in the last line, checks the first 
 cascade((5, Col), Wall) :-
     member((5, Col), Wall).
 cascade((Row, Col), Wall) :-
@@ -207,25 +229,34 @@ cascade((Row, Col), Wall) :-
     NewCol is max((Col+1)mod 6, 1),
     cascade((NewRow, NewCol), Wall).
 
-full_colors(Player, Amount) :-
+% checks in cascade all colors of the wall
+full_colors(Player, Ammount) :-
     find_dict(wall, Player, Wall),
     findall(true, ( 
         member((1, Col), Wall),
         cascade((1, Col), Wall)
     ), List),
-    length(List, Amount).    
+    length(List, Ammount).    
 
+% calculates score for the wall status of the player
 wall_score(P, S) :-
     full_rows(P, RS),
+    % rows
     find_dict(wall, P, T),
-    invert_axis(T, RT),
+    % transposes rows/cols and calculates columns
+    transpose_wall(T, RT),
     full_rows([RT:wall], CS),
+    % colors
     full_colors(P, DS),
+    % score for each one
     S is RS*2+CS*7+10*DS.
 
-new_game(Players, Factories, [P, A:amounts, O:outs, F:factories]) :-
-    tiles_colors(C),
+% prepares the new game for the number of players and factories
+new_game(Players, Factories, [P, A:ammounts, O:outs, F:factories]) :-
+    get_colors(C),
     new_players(Players, P),
+
+    % filling bag and factories
     findall(20:X, member(X, C), A),
     findall(0:X, member(X, C), O),
     add([], 4, empty, E),
@@ -233,55 +264,62 @@ new_game(Players, Factories, [P, A:amounts, O:outs, F:factories]) :-
     enumerate(EF, 1, NF),
     set_dict(center, NF, [], F).
 
-order_players(Game, NewPlayers) :-
+% reorders the players for next round
+new_order(Game, NewPlayers) :-
     find_dict(players, Game, Players),
     indexed_sort(Players, OriginalOrder),
     sort_players(OriginalOrder, NewPlayers).
 
+% sorts players for new round
 sort_players(Players, NewPlayers) :-
     initial_player(Pid),
     append(A, [Player:Pid|B], Players),
     append([Player:Pid|B], A, NewPlayers).
 
+% gets the players in the order and runs the round, 
+% once ended validates the board to see if new round has to start
 run(Game, Events, NewGame) :-
-    order_players(Game, Players),
+    new_order(Game, Players),
     run_round(Game, Players, TempGame, CurEvents),
     append(Events, CurEvents, NewEvents),
     validate(TempGame, NewEvents, NewGame).
 
+% checks if the game can continue or has to end
+% either for a player filling a column or because there are no more tiles
 validate(Game, Events, NewGame) :-
     find_dict(factories, Game, Factories),
     findall(Fac, member(Fac:_, Factories), FacList),
     append_all(FacList, AllTiles),
     length(AllTiles, Sz),
     count(AllTiles, empty, Sz), !,
-    clean_players(Game, TempGame),
+    refresh_players(Game, TempGame),
     end_or_continue(TempGame, Events, NewGame).
 validate(Game, Events, NewGame) :-
     run(Game, Events, NewGame).
 
+% checks if a full row exists
+% if not, then finds new first player and prepares new player turn an sends him to play
 end_or_continue(Game, _, NewGame) :-
     ending_condition(Game), !,
     calculate_scores(Game, NewGame).
 end_or_continue(Game, Events, NewGame) :-
     initial_player(Id),
-    get_value_or_default(center, Events, NewId, Id),
+    if_find_else_default(center, Events, NewId, Id),
     retract(initial_player(Id)),
     asserta(initial_player(NewId)),
     find_dict(players, Game, Players),
     find_dict(NewId, Players, FirstPlayer),
     penalize(FirstPlayer, -1, NewFirstP,1),
-    % writeln([
-    %     "Player ", 
-    %     NewId, 
-    %     " will be the first at the next round. ",
-    %     "Cause that recive a penalization\n"
-    % ]),
+    open("log.txt", append, FD),
+    write(FD,["Player ", NewId, " gets penalized for being the first to play next turn"]),
+    nl(FD),
+    close(FD),
     set_dict(NewId, Players, NewFirstP, NewPlayers),
     set_dict(players, Game, NewPlayers, TempGame1),
     new_round(TempGame1, TempGame2),
     run(TempGame2, [], NewGame).
 
+% for each player calculates the score at the end of the game
 calculate_scores(Game, NewGame) :-
     find_dict(players, Game, Players),
     findall(NewPlayer:Id, ( 
@@ -293,8 +331,9 @@ calculate_scores(Game, NewGame) :-
     ), NewPlayers),
     set_dict(players, Game, NewPlayers, NewGame).
 
+% predicate to print in a "beautiful?" way the players and their scores
+% sorted from the highest score to the lowest
 print_scores(EndedGame:scores) :-
-
     open("log.txt", append, FD),
     find_dict(players, EndedGame, Players),
     nl(FD),
@@ -306,15 +345,19 @@ print_scores(EndedGame:scores) :-
     indexed_sort(PlayersInverted, PlayersSorted),
     reverse(PlayersSorted, P),
     findall(P, (
-        member([Id:_|_]:Score, P),
+        member([Id:_|St]:Score, P),
         write(FD,"Player "),
         write(FD, Id),
+        write(FD, " ("),
+        write(FD, St),
+        write(FD, ")"),
         write(FD," => "),
         write(FD,Score),
         nl(FD)
         ),_),
     close(FD).
 
+% initial predicate, creates the game, starts it and outputs the results
 start_game(Players, Factories) :-
     open("log.txt", write, FD),
     write(FD,["Preparing a ", Players, " players Game"]),
@@ -329,87 +372,98 @@ start_game(Players, Factories) :-
     close(Fd),
     print_scores(EndedGame:scores).
     % writeln("true.").
+% if error occurs, notify
 start_game(_, _) :- 
     open("log.txt", append, FD),
     write(FD,"An unexpected failure occur\n"),
     close(FD).
     % writeln("fail.").
 
-penalization_list([-1, -1, -2, -2, -2, -3, -3]:penalties).
+% floor for penalizations
+generate_floor([-1, -1, -2, -2, -2, -3, -3]:penalties).
 
-strategies([basic, greedy]).
+% list of strategies
+get_strategy([first, greedy, random]).
 
+% gets a random strategy to assign to the player
 random_strategy(S) :-
-    strategies(St),
-    random_permutation(St, [S|_]).    
+    get_strategy(St),
+    random_permutation(St, [S|_]).
+
+% counts the number of tiles in a row
 line_score(List, Tile, Score) :-
-    make_intervals(List, Interval),
+    get_all_adjacent(List, Interval),
     findall(X, ( 
         member(X, Interval),
         member(Tile, X)
     ), [Adyacents]),
     length(Adyacents, Score).
 
+% get se score obtained for placing a tile in the board
 tile_score(Player,  (Row, Column), Score) :-
     find_dict(wall, Player, Wall),
     append(Wall, [(Row, Column)], NewWall),
     % row score
     line_score(NewWall,  (Row, Column), RowScore),
-    invert_axis(NewWall, InvertedAxis),
+    transpose_wall(NewWall, InvertedAxis),
     % column score
     line_score(InvertedAxis,  (Column, Row), ColumnScore),
     Score is RowScore+ColumnScore.
 
-valid_choices(Game, Player, Choices) :-
+% gets all possible ways of taking tiles from the factories
+valid_moves(Game, Player, Moves) :-
     find_dict(factories, Game, Fac),
     find_dict(board, Player, Board),
     findall(Lid:Fid:Color,( 
         find_dict(Lid, Board, Line),
-        find_dict(stocks, Line, Stocks),
-        member(empty, Stocks),
+        find_dict(prep, Line, Prep),
+        member(empty, Prep),
         find_dict(valid, Line, ValidColors),
         find_dict(Fid, Fac, CurFac),
         member(Color, ValidColors),
         member(Color, CurFac)
-    ), Choices),
-    not(length(Choices, 0)).    
+    ), Moves),
+    not(length(Moves, 0)).    
 
-available_colors(Game, Choices) :-
+% gives all the options for selecting a color from a factory
+available_colors(Game, Moves) :-
     find_dict(factories, Game, Fac),
     findall(Count:Fid:Color, ( 
         find_dict(Fid, Fac, F),
         member(Color, F),
         Color \= empty,
         count(F, Color, Count)
-    ), Choices),
-    not(length(Choices, 0)).  
+    ), Moves),
+    not(length(Moves, 0)).  
 
+% if a line in the prep is full, clean it and update the board
 clean_line(Player, L, NewPlayer) :-
     find_dict(board, Player, Board),
     find_dict(L, Board, Line),
     find_dict(all, Line, Colors),
     find_dict(valid, Line, [C]),
-    find_dict(stocks, Line, CurStocks),
-    % cheking that the line is full
-    add([], L, C, CurStocks),
+    find_dict(prep, Line, CurPrep),
+
+    add([], L, C, CurPrep),
     append(A, [C | B], Colors),
     append(A, B, List),
     set_dict(all, Line, List, TempLine0),
     set_dict(valid, TempLine0, List, TempLine1),
     % update the player
-    column_of(L, C, Column),
+    find_column(L, C, Column),
     update_score(Player, (L, Column), TempPlayer),
     % cleaning the line
-    add([], L, empty, Stocks),
-    set_dict(stocks, TempLine1, Stocks, TempLine2),
+    add([], L, empty, Prep),
+    set_dict(prep, TempLine1, Prep, TempLine2),
     set_dict(L, Board, TempLine2, NewBoard),
     set_dict(board, TempPlayer, NewBoard, NewPlayer).
 
+% if a tile was added to the board, update the score of the player
 update_score(Player,  (L, C), NewPlayer) :-
     find_dict(board, Player, Board),
     find_dict(L, Board, Line),
-    find_dict(stocks, Line, Stocks),
-    count(Stocks, empty, 0), !,
+    find_dict(prep, Line, Prep),
+    count(Prep, empty, 0), !,
     tile_score(Player,  (L, C), Score),
     find_dict(score, Player, PScore),
     Sum is Score+PScore,
@@ -417,35 +471,36 @@ update_score(Player,  (L, C), NewPlayer) :-
     set_dict(score, CurPlayer, Sum, NewPlayer).
 update_score(P, _, P).
 
+
+% updates line on the preparation zone of the player, Line L recieves the color Color from the factory F
 update_line(Player, Game, L:F:Color, NewPlayer, Diff, Tiles, Test) :-
     find_dict(factories, Game, Factories),
     find_dict(F, Factories, Fac),
     find_dict(board, Player, Board),
     find_dict(L, Board, Line),
-    find_dict(stocks, Line, Stocks),
-    count(Stocks, empty, Empty),
-    count(Fac, Color, Amount),
-    replace(Stocks, Amount, empty, Color, NewStocks),
-    count(NewStocks, empty, NewEmpty),
-    Diff is min(Empty-Amount, 0),
+    find_dict(prep, Line, Prep),
+    count(Prep, empty, Empty),
+    count(Fac, Color, Ammount),
+    replace(Prep, Ammount, empty, Color, NewPrep),
+    count(NewPrep, empty, NewEmpty),
+    Diff is min(Empty-Ammount, 0),
     Tiles is (min(NewEmpty - 1, 0) * -(L - 1)),
 
-    if_print(Test, ["Player new preparation line ", L, " is -> ", NewStocks]),
-    % writeln(["Player new preparation line ", L, " is -> ", NewStocks]),
+    if_print(Test, ["Player modified Line ", L, " -> ", NewPrep]),
 
-    set_dict(stocks, Line, NewStocks, NewLine),
+    set_dict(prep, Line, NewPrep, NewLine),
     set_dict(valid, NewLine, [Color], ValidLine),
     set_dict(L, Board, ValidLine, NewBoard),
     set_dict(board, Player, NewBoard, NewPlayer).
 
+
 update_wall(Player, Tile, NewPlayer) :-
-    % writeln(["Adding ", Tile, " to the player wall"]),
     find_dict(wall, Player, Wall),
     add(Wall, 1, Tile, NewWall),
     set_dict(wall, Player, NewWall, NewPlayer).
 
-penalize(Player, Amount, NewPlayer, Test) :-
-    Amount<0,
+penalize(Player, Ammount, NewPlayer, Test) :-
+    Ammount<0,
     find_dict(penalties, Player, Penalties),
     length(Penalties, Sz),
     Sz>0, !,
@@ -456,15 +511,15 @@ penalize(Player, Amount, NewPlayer, Test) :-
     find_dict(score, Player, Score),
     NewScore is Score+P1,
     set_dict(score, TempPlayer1, NewScore, TempPlayer2),
-    Times is Amount+1,
+    Times is Ammount+1,
     penalize(TempPlayer2, Times, NewPlayer, Test).
 penalize(Player, _, Player, _).
 
 update_player(Player, Game, L:F:Color, NewPlayer, Return, FinalPlayer, Test) :-
-    update_line(Player, Game, L:F:Color, TempPlayer0, Diff, Amount, Test),
+    update_line(Player, Game, L:F:Color, TempPlayer0, Diff, Ammount, Test),
     find_dict(board, TempPlayer0, Board),
-    verify_lines(TempPlayer0, Board:unsorted, FinalPlayer),
-    Return is Amount-Diff,
+    verify_player_lines(TempPlayer0, Board:unsorted, FinalPlayer),
+    Return is Ammount-Diff,
     penalize(TempPlayer0, Diff, NewPlayer,Test).
 
 update_game(Game, _:F:C, NewGame, ReturnedTiles) :-
@@ -488,22 +543,35 @@ update_game(Game, _:F:C, NewGame, ReturnedTiles) :-
     set_dict(C, Outs, Sum, NewOuts),
     set_dict(outs, Temp, NewOuts, NewGame).
 
-basic(Game, Player, NewGame, NewPlayer, A) :-
-    valid_choices(Game, Player, [A|_]), !,
+first(Game, Player, NewGame, NewPlayer, A) :-
+    valid_moves(Game, Player, [A|_]), !,
     update_player(Player, Game, A, NewPlayer, Return, _, 1),
     update_game(Game, A, NewGame, Return).
-basic(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
-    available_colors(Game, [Amount:Id:Color | _]), !,
-    update_game(Game, none:Id:Color, NewGame, Amount),
-    Neg is Amount* -1,
+first(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
+    available_colors(Game, [Ammount:Id:Color | _]), !,
+    update_game(Game, none:Id:Color, NewGame, Ammount),
+    Neg is Ammount* -1,
     penalize(Player, Neg, NewPlayer,1).
-basic(Game, Player, Game, Player, none:none:none).
+first(Game, Player, Game, Player, none:none:none).
+
+random(Game, Player, NewGame, NewPlayer, A) :-
+    valid_moves(Game, Player, Moves), !,
+    random_permutation(Moves, [A|_]),
+    update_player(Player, Game, A, NewPlayer, Return, _, 1),
+    update_game(Game, A, NewGame, Return).
+random(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
+    available_colors(Game, [Ammount:Id:Color | _]), !,
+    update_game(Game, none:Id:Color, NewGame, Ammount),
+    Neg is Ammount* -1,
+    penalize(Player, Neg, NewPlayer,1).
+random(Game, Player, Game, Player, none:none:none).
+
 
 greedy(Game, Player, NewGame, NewPlayer, A) :-
-    valid_choices(Game, Player, Choices), !,
-    findall(Score:Choice, (
-        member(Choice, Choices),
-        update_player(Player, Game, Choice, _, _, TempPlayer, 0),
+    valid_moves(Game, Player, Moves), !,
+    findall(Score:Move, (
+        member(Move, Moves),
+        update_player(Player, Game, Move, _, _, TempPlayer, 0),
         find_dict(score, TempPlayer, Score)
     ), Options),
     sort(Options, Sorted),
@@ -511,26 +579,26 @@ greedy(Game, Player, NewGame, NewPlayer, A) :-
     update_player(Player, Game, A, NewPlayer, Return, _, 1),
     update_game(Game, A, NewGame, Return).
 greedy(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
-    available_colors(Game, Choices), !,
-    sort(Choices, [Amount:Id:Color|_]),
-    update_game(Game, none:Id:Color, NewGame, Amount),
-    Neg is Amount* -1,
+    available_colors(Game, Moves), !,
+    sort(Moves, [Ammount:Id:Color|_]),
+    update_game(Game, none:Id:Color, NewGame, Ammount),
+    Neg is Ammount* -1,
     penalize(Player, Neg, NewPlayer,1).
 greedy(Game, Player, Game, Player, none:none:none).
 
-empty_board(Data:board) :-
+generate_board(Data:board) :-
     add([], 5, 1, List),
     enumerate(List, 1, Enum),
-    tiles_colors(C),
-    findall([New:stocks, C:valid, C:all]:Sz, (
+    get_colors(C),
+    findall([New:prep, C:valid, C:all]:Sz, (
         find_dict(Sz, Enum, _),
         add([], Sz, empty, New)
     ), Data).
 
-new_players(Amount, Players:players) :-
-    empty_board(Board),
-    penalization_list(Penalties),
-    add([], Amount, [Board, Penalties, []:wall, 0:score], List),
+new_players(Ammount, Players:players) :-
+    generate_board(Board),
+    generate_floor(Penalties),
+    add([], Ammount, [Board, Penalties, []:wall, 0:score], List),
     findall(P, (
         member(X, List),
         random_strategy(S),
@@ -542,11 +610,11 @@ run_round(G, [], G, []).
 run_round(Game, [P1:Id|Players], NewGame, [Id:Fid|Events]) :-
     find_dict(strategy, P1, St),
     open("log.txt", append, Fd),
-    write(Fd,["Player ", Id, " turn start --------------------"]),
+    write(Fd,["Player ", Id, " with Strategy ",St, " turn start --------------------"]),
     nl(Fd),
     close(Fd),
-    Choice=..[St, Game, P1, TempGame1, NewP1, Lid:Fid:Color],
-    Choice,
+    Move=..[St, Game, P1, TempGame1, NewP1, Lid:Fid:Color],
+    Move,
     open("log.txt", append, FD),
     write(FD, [
         "Player choose all type ",
@@ -577,9 +645,9 @@ print_preparation(Player:preparation) :-
     find_dict(board, Player, Board),
     findall(Line:Id, (
         member(X:Id, Board),
-        find_dict(stocks, X, Stocks),
+        find_dict(prep, X, Prep),
         Times is 5 - Id,
-        add(Stocks, Times, ' - ', Line)
+        add(Prep, Times, ' - ', Line)
         ), Lines),
     indexed_sort(Lines, Sorted),
     findall(Line, (
@@ -590,13 +658,14 @@ print_preparation(Player:preparation) :-
     nl(Fd),
     close(Fd).
 
+
 generate_wall((6,1), _, Wall, Wall).
 generate_wall((Row,6), Board, Ac, [Ac|R]) :-
     NewRow is Row+1,
     generate_wall((NewRow,1),Board, [], R),!.
 generate_wall((X,Y), Table, Ac, R) :-
     member((X,Y), Table), !,
-    column_of(X,C,Y),
+    find_column(X,C,Y),
     append(Ac, [C], NewAc),
     NewY is Y+1,
     generate_wall((X,NewY), Table, NewAc, R).
@@ -605,11 +674,11 @@ generate_wall((X,Y), Table, Ac, R) :-
     NewY is Y+1,
     generate_wall((X,NewY), Table, NewAc, R).
 
+% predicate to print wall
 print_wall(Player:wall) :-
     open("log.txt", append, Fd),
     write(Fd, "Wall of Player: \n"),
     nl(Fd),
-    % write(Fd, Player),
     find_dict(wall, Player, Wall),
     sort(Wall, SortedWall),
     generate_wall((1,1), SortedWall ,[], FinalWall),
@@ -618,18 +687,18 @@ print_wall(Player:wall) :-
         write(Fd,X),
         nl(Fd)
     ), _),
-    % write(Fd, FinalWall),
     nl(Fd),
     close(Fd).
 
-clean_players(Game, NewGame) :-
+% prepares players for new round, checks if a player has finished game and if not, 
+% cleans board, floor and sets score 
+refresh_players(Game, NewGame) :-
     find_dict(players, Game, Players),
     findall(Player:Id, (
         member(X:Id, Players),
         find_dict(board, X, Board),
-        verify_lines(X, Board:unsorted, CleanedPlayer),
-        % writeln([[CleanedPlayer:player, Id:id]:player]),
-        penalization_list(Penalizations),
+        verify_player_lines(X, Board:unsorted, CleanedPlayer),
+        generate_floor(Penalizations),
         set_dict(penalization, CleanedPlayer, Penalizations, NewPlayer),
         find_dict(score, NewPlayer, CurScore),
         Score is max(CurScore, 0),
@@ -637,12 +706,13 @@ clean_players(Game, NewGame) :-
     ), NewPlayers),
     set_dict(players, Game, NewPlayers, NewGame).
 
-verify_lines(P, [], P).
-verify_lines(Player, [_:Line|Lines], NewPlayer) :-
+% checks if a player has a full lines in the prep zone
+verify_player_lines(P, [], P).
+verify_player_lines(Player, [_:Line|Lines], NewPlayer) :-
     clean_line(Player, Line, CurPlayer), !,
-    verify_lines(CurPlayer, Lines, NewPlayer).
-verify_lines(Player, [_|Lines], NewPlayer) :-
-    verify_lines(Player, Lines, NewPlayer).
-verify_lines(Player, Lines:unsorted, NewPlayer) :-
+    verify_player_lines(CurPlayer, Lines, NewPlayer).
+verify_player_lines(Player, [_|Lines], NewPlayer) :-
+    verify_player_lines(Player, Lines, NewPlayer).
+verify_player_lines(Player, Lines:unsorted, NewPlayer) :-
     indexed_sort(Lines, Sorted),
-    verify_lines(Player, Sorted, NewPlayer).
+    verify_player_lines(Player, Sorted, NewPlayer).
