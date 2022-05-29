@@ -493,18 +493,19 @@ update_line(Player, Game, L:F:Color, NewPlayer, Diff, Tiles, Test) :-
     set_dict(L, Board, ValidLine, NewBoard),
     set_dict(board, Player, NewBoard, NewPlayer).
 
-
+% adds a tile to the wall
 update_wall(Player, Tile, NewPlayer) :-
     find_dict(wall, Player, Wall),
     add(Wall, 1, Tile, NewWall),
     set_dict(wall, Player, NewWall, NewPlayer).
 
+% penalized the player with Ammount, it must be negative
 penalize(Player, Ammount, NewPlayer, Test) :-
     Ammount<0,
-    find_dict(penalties, Player, Penalties),
-    length(Penalties, Sz),
+    find_dict(penalties, Player, Penalizations),
+    length(Penalizations, Sz),
     Sz>0, !,
-    append([P1], R, Penalties),
+    append([P1], R, Penalizations),
 
     if_print(Test,["Player recive ", P1, " of penalization"]),
     set_dict(penalties, Player, R, TempPlayer1),
@@ -515,6 +516,7 @@ penalize(Player, Ammount, NewPlayer, Test) :-
     penalize(TempPlayer2, Times, NewPlayer, Test).
 penalize(Player, _, Player, _).
 
+% updates player line L, verifies that the game ends and if needed penalized the player
 update_player(Player, Game, L:F:Color, NewPlayer, Return, FinalPlayer, Test) :-
     update_line(Player, Game, L:F:Color, TempPlayer0, Diff, Ammount, Test),
     find_dict(board, TempPlayer0, Board),
@@ -522,6 +524,7 @@ update_player(Player, Game, L:F:Color, NewPlayer, Return, FinalPlayer, Test) :-
     Return is Ammount-Diff,
     penalize(TempPlayer0, Diff, NewPlayer,Test).
 
+% updates game, factories are refilled, and tiles out of round are counted
 update_game(Game, _:F:C, NewGame, ReturnedTiles) :-
 
     find_dict(factories, Game, GameFac),
@@ -543,6 +546,7 @@ update_game(Game, _:F:C, NewGame, ReturnedTiles) :-
     set_dict(C, Outs, Sum, NewOuts),
     set_dict(outs, Temp, NewOuts, NewGame).
 
+% player strategy, gets all possible moves and plays the first one, without checking anything
 first(Game, Player, NewGame, NewPlayer, A) :-
     valid_moves(Game, Player, [A|_]), !,
     update_player(Player, Game, A, NewPlayer, Return, _, 1),
@@ -554,6 +558,7 @@ first(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
     penalize(Player, Neg, NewPlayer,1).
 first(Game, Player, Game, Player, none:none:none).
 
+% player strategy random, gets all possible moves, obtains a random permutation from it, and plays the first one
 random(Game, Player, NewGame, NewPlayer, A) :-
     valid_moves(Game, Player, Moves), !,
     random_permutation(Moves, [A|_]),
@@ -566,7 +571,7 @@ random(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
     penalize(Player, Neg, NewPlayer,1).
 random(Game, Player, Game, Player, none:none:none).
 
-
+% player strategy greedy, gets all moves, simulates the all and chooses the one that maximizes the score
 greedy(Game, Player, NewGame, NewPlayer, A) :-
     valid_moves(Game, Player, Moves), !,
     findall(Score:Move, (
@@ -586,6 +591,7 @@ greedy(Game, Player, NewGame, NewPlayer, none:Id:Color) :-
     penalize(Player, Neg, NewPlayer,1).
 greedy(Game, Player, Game, Player, none:none:none).
 
+% creates an empty player board
 generate_board(Data:board) :-
     add([], 5, 1, List),
     enumerate(List, 1, Enum),
@@ -595,10 +601,12 @@ generate_board(Data:board) :-
         add([], Sz, empty, New)
     ), Data).
 
+% generates a board for each player,
+% generates players gets a strategy for that player, assigns a number to the player
 new_players(Ammount, Players:players) :-
     generate_board(Board),
-    generate_floor(Penalties),
-    add([], Ammount, [Board, Penalties, []:wall, 0:score], List),
+    generate_floor(Penalizations),
+    add([], Ammount, [Board, Penalizations, []:wall, 0:score], List),
     findall(P, (
         member(X, List),
         random_strategy(S),
@@ -606,6 +614,7 @@ new_players(Ammount, Players:players) :-
     ), RawPlayers),
     enumerate(RawPlayers, 1, Players).
 
+% runs a round (turn) for a player
 run_round(G, [], G, []).
 run_round(Game, [P1:Id|Players], NewGame, [Id:Fid|Events]) :-
     find_dict(strategy, P1, St),
@@ -638,6 +647,7 @@ run_round(Game, [P1:Id|Players], NewGame, [Id:Fid|Events]) :-
     print_wall(NewP1:wall),
     run_round(TempGame2, Players, NewGame, Events).
 
+% support function to print the preparation zone of a player
 print_preparation(Player:preparation) :-
     open("log.txt", append, Fd),
     write(Fd, "Preparation Zone of Player: \n"),
@@ -658,7 +668,7 @@ print_preparation(Player:preparation) :-
     nl(Fd),
     close(Fd).
 
-
+% generates the wall for a player
 generate_wall((6,1), _, Wall, Wall).
 generate_wall((Row,6), Board, Ac, [Ac|R]) :-
     NewRow is Row+1,
